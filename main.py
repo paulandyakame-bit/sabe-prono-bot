@@ -1,15 +1,11 @@
 import requests
-import time
+import os
 from datetime import datetime
 
-# --- CONFIGURATION ---
-# Remplace par ton token Telegram (tu me l'enverras après)
-TOKEN = "METS_TON_TOKEN_ICI"
-CHANNEL_ID = "@sabeprono"  # ou ton ID de canal
+TOKEN = os.getenv("BOT_TOKEN")
+CHANNEL_ID = "@sabeprono"
 
 def get_pronostics():
-    # Ici ton algorithme de pronostics
-    # Pour l'instant on envoie un message test
     date = datetime.now().strftime("%d/%m/%Y")
     message = f"""
 🔥 *SABE PRONO - {date}* 🔥
@@ -18,21 +14,14 @@ def get_pronostics():
 💰 Cote : 1.85
 🎯 Confiance : 85%
 
-👉 Reste connecté, les pronos arrivent !
+👉 Reste connecté !
 """
     return message
 
 def send_telegram(text):
     url = f"https://api.telegram.org/bot{TOKEN}/sendMessage"
-    data = {
-        "chat_id": CHANNEL_ID,
-        "text": text,
-        "parse_mode": "Markdown"
-    }
+    data = {"chat_id": CHANNEL_ID, "text": text, "parse_mode": "Markdown"}
     requests.post(url, data=data)
 
 if __name__ == "__main__":
-    print("Bot démarré...")
-    prono = get_pronostics()
-    send_telegram(prono)
-    print("Prono envoyé !")
+    send_telegram(get_pronostics())
